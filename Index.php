@@ -1,105 +1,116 @@
-
 <?php
-	include('HEAD.php');
+
+// Open a Connection to MySQL
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "aulabd";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password,$dbname);
+
+// Check connection
+if ($conn->connect_error) 
+{
+    die("Connection failed: " . $conn->connect_error);
+    echo 'errado';
+	return;
+} 
+
+// SELECIONAR BANCO QUE VAMOS TRABALHAR
+$query = 'use aulabd';
+$result = $conn->query($query);	
+
+
+$codcli	= @$_POST['codcli'];
+$nome	= @$_POST['nome'];
+$end	= @$_POST['end'];
+$cid 	= @$_POST['cid'];
+$cep	= @$_POST['cep'];
+$uf		= @$_POST['uf'];
+
+
+// Prevenção de injection
+$query = " INSERT INTO CLIENTES ( cod_cli, nome, endereco, cidade, cep, uf ) Values (?, ?, ?, ?, ?, ?)";
+
+$querytratada = $conn->prepare($query); 
+$codigo = 0;
+$querytratada->bind_param("isssss",$codigo,$nome,$end,$cid,$cep,$uf);
+
+$querytratada->execute();
+
+if ($querytratada->affected_rows > 0) 
+{
+	$resposta = 'ok';
+} 
+else 
+{
+	$resposta = 'erro';
+}
+	
+
 ?>
+
+
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>Exercicio - Banco de dados</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <header>
+        <h1>Exercicio - Banco de dados</h1>
+    </header>
 
     <main>
         <section>
-
-			<h1>Teste</h1>      
-
-            <form>
-				<DIV>
-					<label 
-						id='label1'>
-						STATUS: Não Conectado
-					</label>
-				</DIV>
-				
-				<DIV>
-					<label 
-						id='label2'>
-						Conexão Atual: MySQL
-					</label>
-				</DIV>				
+            <form id="form" action="index.php" method="POST">
                 
-                <button 
-					id='cmd_config_mysql'
-                    
-					type="button" 
-                    name="cmdconfig_mysql" 
-                    onclick=""
-				
-					>Configurar mySQL
-              
-				</button>
-				
-                <button 
-					id='cmd_ok_mysql'
-                    
-					type="button" 
-                    name="cmdmysql" 
-                    onclick=""
-				
-					>Conectar/Desconectar ao mySQL
-              
-				</button>				
-				
-				<DIV>
-					<form>
-						 Driver:	<input type="text" name="DRIVER"	value="">
-						 SERVER:	<input type="text" name="SERVER"	value="">
-						 UID:		<input type="text" name="UID"		value="">
-						 PWD:		<input type="text" name="PWD"		value="">
-						 DATABASE:	<input type="text" name="DATABASE"	value="">
-					</form>
-				</DIV>
+				<div>
+					<label for="codcli">Código do cliente</label>
+					<input type="text" id="codcli" class="" name="codcli" placeholder="Código cliente" value= '' >
+				</div>
 
-                <button 
-					id='cmd_config_sql'
-                    
-					type="button" 
-                    name="cmd_config_sql" 
-                    onclick=""
-					
-					>Configurar SQL SERVER
+				<div>
+					<label for="nome">Nome</label>
+					<input type="text" id="nome" class="" name="nome" placeholder="Nome" value= ''>  
+				</div>				
+
+				<div>
+					<label for="end">Endereço</label>
+					<input type="text" id="end" class="" name="end" placeholder="Endereço" value= ''>  
+				</div>
+
+				<div>
+					<label for="cid">Cidade</label>
+					<input type="text" id="cid" class="" name="cid" placeholder="Cidade" value= ''> 
+				</div> 
+
+				<div>
+					<label for="cep">CEP</label>
+					<input type="text" id="cep" class="" name="cep" placeholder="CEP" value= ''>
+				</div>  
+
+				<div>
+					<label for="uf">UF</label>
+					<input type="text" id="uf" class="" name="uf" placeholder="UF" value= ''>  												
+				</div>
 				
-                </button>
-				
-                <button 
-					id='cmd_ok_sql'
-                    
-					type="button" 
-                    name="cmdmysql" 
-                    onclick=""
-				
-					>Conectar/Desconectar ao SQL SERVER
-              
-				</button>				
-				
-				<DIV>
-					<form>
-						 Driver:	<input type="text" name="DRIVER"	value="">
-						 SERVER:	<input type="text" name="SERVER"	value="">
-						 UID:		<input type="text" name="UID"		value="">
-						 PWD:		<input type="text" name="PWD"		value="">
-						 DATABASE:	<input type="text" name="DATABASE"	value="">
-					</form>
-				</DIV>				
-				
-				<DIV> 
-					<LABEL>Escolha a conexão</LABEL>
-					<select name="conexao">
-						<option value="mysql">My SQL</option>
-						<option value="sql">SQL SERVER</option>
-					</select>
-				</DIV>
-				
+                <input type="submit" value="Enviar">
+                
             </form>
-			
         </section>
     </main>
-	
-<?php
-	include('FOOTER.php');
-?>
+
+    <footer>
+        <span>footer</span>
+    </footer>
+</body>
+</html>
