@@ -24,7 +24,7 @@ $resultado = $numero1 + $numero2;
 
     <main>
         <section>
-            <form id="form" action="index.php" method="POST">
+            <form id="form" action="somar.php" method="POST">
                 
                 <!-- label for="nome" semanticamente para dizer para qual text a label se destina -->
                 
@@ -46,7 +46,7 @@ $resultado = $numero1 + $numero2;
     </main>
 
     <footer>
-        <span>footer</span>
+        <div> <a href="index.html">Voltar ao inicio</a> </div>
     </footer>
 </body>
 </html>
