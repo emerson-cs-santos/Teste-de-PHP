@@ -49,7 +49,7 @@ else
 				<input type="text" id="login" class="" name="login" placeholder="login" value=""  >
 
 				<label for="senha">Número 2</label>
-				<input type="text" id="senha" class="" name="senha" placeholder="senha" value="" >  
+				<input type="password" id="senha" class="" name="senha" placeholder="senha" value="" >  
 		
 				<div>
 					<input type="submit" value="Enviar">
