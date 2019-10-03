@@ -10,17 +10,64 @@ if (isset($_SESSION['controle']))
 $login = @$_POST['login'];
 $senha = @$_POST['senha'];
 
-echo $login;
-echo $senha;
+// echo $login;
+// echo $senha;
 
-if($login=='sa' and $senha =='spy')
+// Open a Connection to MySQL
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "aulaphp";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password,$dbname);
+// Check connection
+if ($conn->connect_error) 
 {
-	$_SESSION['controle'] = $login;
+    die("Connection failed: " . $conn->connect_error);
+    echo 'errado';
+	return;
+} 
+
+// SELECIONAR BANCO QUE VAMOS TRABALHAR
+$query = 'use aulaphp';
+$result = $conn->query($query);	
+
+//$codigo	= @$_GET['codigo'];
+
+$codigo = "";
+
+if (!$login == '')
+{
+	//$query = "select codigo,nome,email,senha from usuarios_login where email = '$login' and senha = '$senha'";
+	//$result = $conn->query($query);   
+
+	//$row = $result->fetch_assoc();
+	//$codigo  = $row["codigo"];	
+	//$nome  = $row["nome"];	
+	
+	$query = "select codigo,nome,email,senha from usuarios_login where email = ? and senha = ?";
+	$querytratada = $conn->prepare($query); 
+	$querytratada->bind_param("ss",$login,$senha);
+	$querytratada->execute();
+	$result = $querytratada->get_result();
+	
+	$row = $result->fetch_assoc();
+	$codigo  = $row["codigo"];	
+	$nome  = $row["nome"];	
+}
+	
+
+
+//if($login=='sa' and $senha =='spy')
+if($codigo>0)
+{
+	$_SESSION['controle'] = $nome;
 	header('Location: Index.php');
 }
 else
 {
-	echo 'qq merda';
+	echo 'erro ao logar';
 }
 
 ?>
@@ -45,10 +92,10 @@ else
             <form id="form" action="Login.php" method="POST">
                 
                 
-				<label for="login">User</label>
+				<label for="login">User - Email</label>
 				<input type="text" id="login" class="" name="login" placeholder="login" value=""  >
 
-				<label for="senha">Número 2</label>
+				<label for="senha">senha</label>
 				<input type="password" id="senha" class="" name="senha" placeholder="senha" value="" >  
 		
 				<div>
